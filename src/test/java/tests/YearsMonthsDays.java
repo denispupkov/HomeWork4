@@ -13,6 +13,7 @@ import utilities.BrowserUtils;
 import utilities.Driver;
 
 import java.time.Month;
+import java.time.YearMonth;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
@@ -31,6 +32,9 @@ public class YearsMonthsDays {
         Random random =new Random();
         int index = random.nextInt(dropdownList.size());
         select.selectByIndex(index);
+        int year = Integer.parseInt(select.getFirstSelectedOption().getText());
+        System.out.println("Chosen year: "+year);
+
         
 
 
@@ -50,12 +54,19 @@ public class YearsMonthsDays {
             Select select3 = new Select(dropdownDays);
             List<WebElement> allDays = select3.getOptions();
             int actual = allDays.size();
-            int numDays = Month.of(i).length(true);
-
+            YearMonth yearMonthObject = YearMonth.of(year, 2);
+            int daysInMonth = yearMonthObject.lengthOfMonth();
+            int numDays;
+            if (daysInMonth>28) {
+                 numDays = Month.of(i).length(true);
+            }
+            else {
+                numDays = Month.of(i).length(false);
+            }
 
 
             Assert.assertEquals(numDays, actual);
-            System.out.println(": "+numDays);
+            System.out.println(": "+numDays+" days");
             BrowserUtils.wait(3);
         }
 
